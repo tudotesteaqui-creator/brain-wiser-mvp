@@ -5,7 +5,7 @@
 
 ## 1. Visão geral do projeto
 
-O **brAIn Wiser** é uma plataforma de inteligência estratégica projetada para facilitar a integração entre os times do grupo Wiser Educação. A solução centraliza o conhecimento contido em diversos documentos, oferecendo uma visão 360º das estratégias e promovendo a descoberta de sinergias entre diferentes projetos e departamentos.
+A **brAIn Wiser** é uma plataforma de inteligência estratégica projetada para facilitar a integração e gestão da informação entre os times do grupo Wiser Educação. A solução centraliza o conhecimento contido em diversos documentos, oferecendo uma visão 360º das estratégias e promovendo a descoberta de sinergias entre diferentes projetos e departamentos.
 
 Construído como um MVP (Mínimo Produto Viável), este protótipo demonstra as três funcionalidades principais que formam o núcleo da plataforma, utilizando uma arquitetura de custo zero para fins de validação e demonstração.
 
@@ -88,4 +88,5 @@ Após a validação, os seguintes passos podem ser considerados para evoluir o p
 2.  **Banco de dados vetorial escalável:** migrar a busca de similaridade para um serviço gerenciado como o **Vertex AI Vector Search** ou **Pinecone** para escalar a solução para milhares de documentos
 3.  **Autenticação de usuários:** implementar um sistema de login (ex.: OAuth com Contas Google) para garantir a segurança dos dados
 4.  **Sincronização uutomática com o Google Drive:** criar um serviço que monitore a pasta do Google Drive da wiser e atualize automaticamente a base de conhecimento
+
 5.  **Geração de vídeos:** implementar a funcionalidade de geração de vídeo utilizando APIs como a do **Synthesia** ou **RunwayML**
