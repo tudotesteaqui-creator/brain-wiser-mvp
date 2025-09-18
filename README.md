@@ -53,8 +53,6 @@ A arquitetura foi planejada para ter **custo zero** de implantação e manutenç
 O projeto está contido em uma única pasta com uma estrutura simples e organizada:
 
 brain_wiser_mvp/
-├── assets/
-│   └── (local para imagens, como o logo)
 ├── documentos/
 │   └── (local para os PDFs que formam a base de conhecimento)
 ├── .env                  # Arquivo para guardar a chave secreta da API do Google
@@ -90,3 +88,4 @@ Após a validação, os seguintes passos podem ser considerados para evoluir o p
 4.  **Sincronização uutomática com o Google Drive:** criar um serviço que monitore a pasta do Google Drive da wiser e atualize automaticamente a base de conhecimento
 
 5.  **Geração de vídeos:** implementar a funcionalidade de geração de vídeo utilizando APIs como a do **Synthesia** ou **RunwayML**
+
