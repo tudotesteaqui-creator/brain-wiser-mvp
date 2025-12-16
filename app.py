@@ -1,4 +1,4 @@
-## IMPORTAÇÃO DAS FERRAMENTAS NECESSÁRIAS
+# Importando todas as ferramentas necessárias
 import streamlit as st
 import google.generativeai as genai
 import os
@@ -12,13 +12,13 @@ from PIL import Image
 import time
 from google.api_core import exceptions
 
-## 1. CONFIGURAÇÃO INICIAL DA PÁGINA
+# 1. CONFIGURAÇÃO INICIAL DA PÁGINA
 st.set_page_config(
     page_title="brAIn Wiser",
     layout="wide"
 )
 
-## 2. CARREGAMENTO DE CONFIGURAÇÕES E API
+# 2. CARREGAMENTO DE CONFIGURAÇÕES E API
 load_dotenv()
 GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
 if not GOOGLE_API_KEY:
@@ -30,20 +30,14 @@ except Exception as e:
     st.error(f"Erro ao configurar a API do Gemini: {e}")
     st.stop()
 
-## 3. DESIGN (CSS)
+# 3. DESIGN (CSS)
 st.markdown("""
     <style>
         html, body, .stApp { background-color: #1B1C1D !important; color: #FFFFFF !important; font-family: 'sans-serif'; }
         .block-container { padding: 2rem 5rem; }
         .divider { margin-top: 3rem; margin-bottom: 3rem; border-top: 1px solid rgba(255, 255, 255, 0.1); }
         h1, h2, h3 { color: #FFFFFF; font-weight: 300; }
-        
-        .logo-title {
-            font-size: 2.5rem;
-            font-weight: 700;
-            color: #FFFFFF;
-        }
-
+        .logo-title { font-size: 2.5rem; font-weight: 700; color: #FFFFFF; }
         .stTabs [data-baseweb="tab-list"] { gap: 2rem; border-bottom: 1px solid rgba(255, 255, 255, 0.1); }
         .stTabs [data-baseweb="tab"] { padding: 10px 0; background-color: transparent; color: rgba(255, 255, 255, 0.5); border-bottom: 2px solid transparent; transition: color 0.3s; }
         .stTabs [data-baseweb="tab"]:hover { color: #FFFFFF; }
@@ -61,7 +55,7 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-## 4. FUNÇÕES DO "MOTOR" DA APLICAÇÃO
+# 4. FUNÇÕES DO "MOTOR" DA APLICAÇÃO
 @st.cache_data
 def extract_text_from_pdfs(pdf_folder):
     texts = {}
@@ -111,7 +105,7 @@ def find_best_chunks(query, dataframe):
 
 def generate_gemini_response(prompt_text):
     try:
-        model = genai.GenerativeModel('gemini-1.5-flash-latest')
+        model = genai.GenerativeModel('gemini-pro')
         response = model.generate_content(prompt_text)
         return response.text
     except exceptions.ResourceExhausted:
@@ -129,7 +123,7 @@ def extract_text_from_uploaded_pdf(uploaded_file):
         text = "Não foi possível ler o arquivo PDF."
     return text
 
-## 5. LÓGICA DA INTERFACE
+# 5. LÓGICA PRINCIPAL DA INTERFACE
 all_texts = extract_text_from_pdfs("documentos")
 if not all_texts:
     st.error("Nenhum arquivo PDF encontrado na pasta 'documentos'.")
@@ -182,7 +176,7 @@ with tab2:
             st.warning("Selecione pelo menos dois documentos.")
         else:
             with st.spinner("Realizando análise cruzada..."):
-                context = "\n\n".join([f"--- Conteúdo do Documento: {d} ---\n{all_texts[d][:4000]}" for d in selected_docs])
+                context = "\n\n".join([f"--- Conteúdo do Documento: {d}\n{all_texts[d][:4000]}" for d in selected_docs])
                 final_prompt = f"Analise os documentos e descreva em tópicos:\n1. Sinergias.\n2. Conflitos.\n3. Recomendações.\n\n{context}"
                 analysis_result = generate_gemini_response(final_prompt)
                 st.markdown(analysis_result)
@@ -200,31 +194,26 @@ with tab3:
         with col1:
             if st.button("Gerar mapa mental"):
                 with st.spinner("Criando mapa mental..."):
-                    
                     final_prompt = f"""
                     Transforme o texto em um mapa mental no formato DOT language do Graphviz com um tema escuro e moderno.
                     Comece a resposta diretamente com 'digraph G {{'. Não inclua a palavra 'graphviz' ou ```.
-
                     Use este template de estilo:
                     digraph G {{
                         graph [bgcolor="transparent", rankdir=TB];
                         node [shape=box, style="rounded,filled", fontname="sans-serif", fontcolor="#FFFFFF", color="#70315E", fillcolor="#355572"];
                         edge [color="#FFFFFF", style=solid];
-
                         // Defina as conexões aqui, como "Nó Principal" -> "Sub-nó";
                     }}
-
                     Texto para converter:
                     {st.session_state.last_analysis}
                     """
-                    
                     response_text = generate_gemini_response(final_prompt)
                     st.subheader("Mapa mental da análise")
                     try:
                         st.graphviz_chart(response_text)
                     except Exception:
                         st.error("Não foi possível gerar o mapa mental. A IA pode ter retornado um formato inválido.")
-                        st.text(response_text) # Mostra o código gerado para depuração
+                        st.text(response_text)
 
         with col2:
             if st.button("Gerar áudio da análise"):
